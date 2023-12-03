@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/screens/weather_page.dart';
+import 'package:weather_app/screens/splash_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/services/weather_services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,17 +10,21 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [
+
+        ChangeNotifierProvider(create: (_)=>WeatherServices()),
+
+
+    ],child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        fontFamily: 'Poppins',
-        useMaterial3: true,
+      fontFamily: 'Poppins'
       ),
-      home:  WeatherScreen(),
-    );
+home: const Splash(),
+    ),);
   }
 }

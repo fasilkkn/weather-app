@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:weather_app/model/eather_model.dart';
-import 'package:weather_app/res/app_urls.dart';
 import 'package:weather_app/services/weather_services.dart';
-import 'package:weather_app/view_model/weather_view_model.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -13,11 +10,8 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  final weatherServices = WeatherServices(AppUrl.apiKey);
+  final weatherServices = WeatherServices();
   Weather? _weather;
-
-//api key
-  WeatherViewModel homeViewModel = WeatherViewModel();
 
   fetchWeather() async {
     String cityName = await weatherServices.getCurrentCity();
@@ -38,11 +32,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
     super.initState();
   }
 
-//fetch weather
 
 //weather animations
 String getWeatherAnimation(String mainCondition) {
-  if(mainCondition == null) return 'assets/img/chilly.JPG';
   switch (mainCondition.toLowerCase()) {
     case 'clouds':
     case 'mist' :
@@ -50,21 +42,21 @@ String getWeatherAnimation(String mainCondition) {
     case 'haze' :
     case 'dust':
     case 'fog' :
-    return 'assets/img/chilly.JPG';
+    return 'assets/img/3d-mountain-landscape-against-sunset-sky-with-low-clouds_1048-12442.jpg';
 
     case 'rain':
     case 'drizzle' :
     case 'shower rain':
-    return 'assets/img/rainy.JPG';
+    return 'assets/img/rain.jpeg';
 
     case 'thunderstorm':
-    return 'assets/img/rainy.JPG';
+    return 'assets/img/thunderstorm.jpeg';
 
     case 'clear' :
-    return 'assets/img/sunny.avif';
+    return 'assets/img/3d-hazy-mountain-range-against-sunset-sky_1048-10361.jpg';
 
     default :
-    return 'assets/img/sunny.avif';
+    return 'assets/img/3d-hazy-mountain-range-against-sunset-sky_1048-10361.jpg';
   }}
 
   @override
@@ -75,10 +67,11 @@ String getWeatherAnimation(String mainCondition) {
         body: Stack(
           alignment: Alignment.center,
       children: [
+        (_weather?.mainCondition == null)? const Center(child: CircularProgressIndicator()) :
         SizedBox(
           height: size.height,
           width: size.width,
-          child: Image.asset('assets/img/sunny.avif', fit: BoxFit.fitHeight),
+          child: Image.asset(getWeatherAnimation('${_weather?.mainCondition}'), fit: BoxFit.fitHeight),
         ),
 
          Positioned(
@@ -88,11 +81,15 @@ String getWeatherAnimation(String mainCondition) {
           child: Center(
             child: Column(
               children: [
+                (_weather?.temp==null) ? const Text(''):
                 Text('${_weather?.temp!.round()} °C' , style: const TextStyle(color: Colors.white, fontSize: 40),),
+                (_weather?.mainCondition == null) ? Text(''):
                 Text('${_weather?.mainCondition}', style: const TextStyle(color: Colors.white),),
-                 Text(_weather?.cityName ?? 'loading city name', style: const TextStyle(color: Colors.white),),
+                 Text(_weather?.cityName ?? '', style: const TextStyle(color: Colors.white),),
               ],
             ))),
+
+            (_weather?.temp == null)? const SizedBox() :
         Positioned(
           bottom: 30,
           left: 10,
@@ -102,7 +99,7 @@ String getWeatherAnimation(String mainCondition) {
              Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                children: [
-                 Text('Monday', style: const TextStyle(color: Colors.white),),
+                 const Text('Monday', style:  TextStyle(color: Colors.white),),
 
                  
                  Column(
@@ -130,12 +127,12 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
                ],
              ),
 
-             Divider(color: Colors.white54,),
+             const Divider(color: Colors.white54,),
 
              Row(
 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                children: [
-                 const Text('Wednesday', style: const TextStyle(color: Colors.white),),
+                 const Text('Wednesday', style: TextStyle(color: Colors.white),),
 
                  Column(
                   children: [
@@ -151,35 +148,6 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
       ],
     )
-
-        // ChangeNotifierProvider(
-        //   create: (BuildContext context) =>homeViewModel ,
-        //   child: Consumer<WeatherViewModel>(
-        //     builder: (context,value,_) {
-        //       switch(value.weather.status){
-
-        //         case Status.Loading:
-        //           return const Center(child:  CircularProgressIndicator());
-
-        //           case Status.Error:
-        //           return  Center(child: Text(value.weather.message.toString()));
-
-        //           case Status.Completed :
-        //           return Column(
-        //             mainAxisAlignment: MainAxisAlignment.center,
-        //             children: [
-        //                 Text(value.weather.data!.cityName.toString()),
-        //                 Text(value.weather.data!.cityName.toString()),
-        //             ],
-        //             );
-
-        //         case null:
-        //           // TODO: Handle this case.
-        //     }
-        //     return Container();
-        //     }
-        //   ),
-        // ),
         );
   }
 }
