@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:weather_app/data/response/status.dart';
 import 'package:weather_app/model/eather_model.dart';
 import 'package:weather_app/res/app_urls.dart';
 import 'package:weather_app/services/weather_services.dart';
@@ -44,7 +42,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 //weather animations
 String getWeatherAnimation(String mainCondition) {
-  if(mainCondition == null) return 'assets/lottie/Animation - 1701493770281.json';
+  if(mainCondition == null) return 'assets/img/chilly.JPG';
   switch (mainCondition.toLowerCase()) {
     case 'clouds':
     case 'mist' :
@@ -52,44 +50,102 @@ String getWeatherAnimation(String mainCondition) {
     case 'haze' :
     case 'dust':
     case 'fog' :
-    return 'assets/lottie/clouds.json';
+    return 'assets/img/chilly.JPG';
 
     case 'rain':
     case 'drizzle' :
     case 'shower rain':
-    return 'assets/lottie/rain.json';
+    return 'assets/img/rainy.JPG';
 
     case 'thunderstorm':
-    return 'assets/lottie/thunderstorm.json';
+    return 'assets/img/rainy.JPG';
 
     case 'clear' :
-    return 'assets/lottie/sunny.json';
+    return 'assets/img/sunny.avif';
 
     default :
-    return 'assets/lottie/sunny.json';
+    return 'assets/img/sunny.avif';
   }}
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.blue.shade100,
         body: Stack(
+          alignment: Alignment.center,
       children: [
         SizedBox(
           height: size.height,
           width: size.width,
-          child: Lottie.asset(getWeatherAnimation('${_weather?.mainCondition}'), fit: BoxFit.contain),
+          child: Image.asset('assets/img/sunny.avif', fit: BoxFit.fitHeight),
         ),
-        Positioned(
-          right: 0,
+
+         Positioned(
+          top: 60,
           left: 0,
-          bottom: 60,
+          right: 0,
+          child: Center(
+            child: Column(
+              children: [
+                Text('${_weather?.temp!.round()} °C' , style: const TextStyle(color: Colors.white, fontSize: 40),),
+                Text('${_weather?.mainCondition}', style: const TextStyle(color: Colors.white),),
+                 Text(_weather?.cityName ?? 'loading city name', style: const TextStyle(color: Colors.white),),
+              ],
+            ))),
+        Positioned(
+          bottom: 30,
+          left: 10,
+          right: 10,
           child: Column(
             children: [
-              Text(_weather?.cityName ?? 'loading city name', style: const TextStyle(color: Colors.white),),
-              Text('${_weather?.temp!.round()}°C' , style: const TextStyle(color: Colors.white),),
-              Text('${_weather?.mainCondition}', style: const TextStyle(color: Colors.white),),
+             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Text('Monday', style: const TextStyle(color: Colors.white),),
+
+                 
+                 Column(
+                  children: [
+                     Text('${_weather?.temp!.round()} °C' , style: const TextStyle(color: Colors.white),),
+                    Text('${_weather?.mainCondition}', style: const TextStyle(color: Colors.white),),
+                  ],
+                 ),
+               ],
+             ),
+
+             Divider(color: Colors.white54,),
+
+             Row(
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 const Text('Thuesday', style: const TextStyle(color: Colors.white),),
+
+                 Column(
+                  children: [
+                     Text('${_weather?.temp!.round()} °C' , style: const TextStyle(color: Colors.white),),
+                    Text('${_weather?.mainCondition}', style: const TextStyle(color: Colors.white),),
+                  ],
+                 ),
+               ],
+             ),
+
+             Divider(color: Colors.white54,),
+
+             Row(
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 const Text('Wednesday', style: const TextStyle(color: Colors.white),),
+
+                 Column(
+                  children: [
+                     Text('${_weather?.temp!.round()} °C' , style: const TextStyle(color: Colors.white),),
+                    Text('${_weather?.mainCondition}', style: const TextStyle(color: Colors.white),),
+                  ],
+                 ),
+               ],
+             ),
+              
             ],
           ),
         ),
